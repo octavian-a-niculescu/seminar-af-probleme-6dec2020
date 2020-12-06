@@ -1,0 +1,61 @@
+#include <iostream>
+
+using namespace std;
+
+void citire(int& suma, int& n, int a[])
+{
+	cin >> suma >> n;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a[i];
+	}
+}
+
+int partitionare(int low, int high, int arr[])
+{
+	int pivot = arr[high];
+	int contorSchimbate = low;
+	for (int i = low; i < high; i++)
+	{
+		if (arr[i] < pivot)
+		{
+			swap(arr[i], arr[contorSchimbate++]);
+		}
+	}
+	swap(arr[contorSchimbate], arr[high]);
+	return contorSchimbate;
+}
+
+void qs(int low, int high, int arr[])
+{
+	if (low < high)
+	{
+		int pivot = partitionare(low, high, arr);
+		qs(low, pivot - 1, arr);
+		qs(pivot + 1, high, arr);
+	}
+}
+
+void greedy(int suma, int n, int a[])
+{
+	qs(0, n - 1, a);
+	for (int i = n - 1; i >= 0; i--)
+	{
+		if (suma == 0)
+		{
+			break;
+		}
+		if (a[i] <= suma)
+		{
+			cout << a[i] << "*" << suma / a[i] << ", ";
+		}
+		suma %= a[i];
+	}
+}
+
+
+int main() {
+	int a[100], input, suma;
+	citire(suma, input, a);
+	greedy(suma, input, a);
+}
